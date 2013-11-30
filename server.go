@@ -1,25 +1,45 @@
 package main
 
 import (
-	"github.com/codegangsta/martini"
+	"log"
+	"net/http"
+	"encoding/json"
+	"fmt"
 )
 
+type Zurl struct {
+	Id string
+}
+
 func main() {
-	m := martini.New()
-	r := martini.NewRouter()
-	m.Use(martini.Logger())
-	m.Use(martini.Recovery())
-	m.Action(r.Handle)
+	http.HandleFunc("/", Root)
 
-	r.Get("/", Welcome)
-	r.Get("/:id", ExpandUrl)
-	m.Run()
+	fmt.Println("listening...")
+	err := http.ListenAndServe(":5000", nil)
+	if err != nil {
+		log.Fatal("Error: %v", err)
+	}
 }
 
-func Welcome() (int, string) {
-	return 200, "Hello! Zurl is a URL shortener service."
+func Root(res http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case "GET":
+		Expand(res, req)
+	case "POST":
+		Shorten(res, req)
+	default:
+		res.WriteHeader(405)
+	}
 }
 
-func ExpandUrl(params martini.Params) (int, string) {
-	return 200, "ID: " + params["id"]
+func Expand(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintln(res, "Hello! Zurl is a URL shortener service.")
+}
+
+func Shorten(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json; charset=utf-8")
+	url := &Zurl{Id: "abc1"}
+	data, _ := json.Marshal(url)
+	res.Write(data)
 }
