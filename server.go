@@ -11,6 +11,13 @@ type Zurl struct {
 	Id string
 	LongUrl string
 }
+func (url Zurl) validate() (bool, string) {
+	return true, ""
+}
+
+type Error struct {
+	Message string
+}
 
 func main() {
 	http.HandleFunc("/", Root)
@@ -44,7 +51,15 @@ func Expand(res http.ResponseWriter, req *http.Request) {
 
 func Shorten(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	url := &Zurl{Id: "abc1"}
-	data, _ := json.Marshal(url)
-	res.Write(data)
+	zurl := &Zurl{Id: "abc1", LongUrl: req.FormValue("url")}
+	valid, err := zurl.validate()
+	if valid {
+		data, _ := json.Marshal(zurl)
+		res.WriteHeader(201)
+		res.Write(data)
+	} else {
+		data, _ := json.Marshal(&Error{Message: err})
+		res.WriteHeader(422)
+		res.Write(data)
+	}
 }
