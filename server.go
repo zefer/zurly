@@ -5,14 +5,20 @@ import (
 	"net/http"
 	"encoding/json"
 	"fmt"
+	"regexp"
 )
 
 type Zurl struct {
 	Id string
 	LongUrl string
 }
-func (url Zurl) validate() (bool, *Error) {
-	return true, &Error{Message: ""}
+func (zurl Zurl) validate() (bool, *Error) {
+	match, _ := regexp.MatchString(`^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$`, zurl.LongUrl)
+	if match {
+		return true, &Error{Message: ""}
+	} else {
+		return false, &Error{Message: "not a valid url"}
+	}
 }
 
 type Error struct {
