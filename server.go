@@ -69,8 +69,7 @@ func Expand(res http.ResponseWriter, req *http.Request) {
 	id := strings.Replace(req.URL.Path, "/", "", -1)
 	zurl, err := findZurl(id)
 	if err == nil {
-		res.WriteHeader(200)
-		res.Write([]byte(zurl.LongUrl))
+		http.Redirect(res, req, zurl.LongUrl, 302)
 	} else {
 		res.WriteHeader(404)
 		res.Write([]byte(err.Message))
