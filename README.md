@@ -24,3 +24,8 @@ content negotiation.
 # Build & Run
 
 `go build` then `PORT=5000 zurly-server`
+
+# Redis
+
+Connects to `127.0.0.1:6379` by default. Override this by setting env vars
+`REDIS_ADDRESS` & `REDIS_PASSWORD`.
