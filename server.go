@@ -31,6 +31,15 @@ func initCounter() {
 }
 
 func main() {
+	address := os.Getenv("REDIS_ADDRESS")
+	if address != "" {
+		log.Printf("Connecting to redis at %v", address)
+		redisClient = redis.Client{
+			Addr:     address,
+			Password: os.Getenv("REDIS_PASSWORD"),
+		}
+	}
+
 	initCounter()
 	http.HandleFunc("/", Root)
 	port := os.Getenv("PORT")
