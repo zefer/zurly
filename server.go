@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"log"
 	"net/http"
 	"encoding/json"
@@ -32,9 +33,9 @@ func initCounter() {
 func main() {
 	initCounter()
 	http.HandleFunc("/", Root)
-
-	log.Print("Listening")
-	err := http.ListenAndServe(":5000", nil)
+	port := os.Getenv("PORT")
+	log.Print("Listening on port " + port)
+	err := http.ListenAndServe(":" + port, nil)
 	if err != nil {
 		log.Fatal("Error: %v", err)
 	}
