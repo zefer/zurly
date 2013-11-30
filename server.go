@@ -5,42 +5,11 @@ import (
 	"net/http"
 	"encoding/json"
 	"fmt"
-	"regexp"
 	"github.com/hoisie/redis"
+	"strings"
 )
 
 var redisClient redis.Client
-
-type Zurl struct {
-	Id string
-	LongUrl string
-}
-
-func (this *Zurl) json() ([]byte) {
-	data, _ := json.Marshal(this)
-	return data
-}
-
-func (this *Zurl) validate() (bool, *Error) {
-	match, _ := regexp.MatchString(`^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$`, this.LongUrl)
-	if match {
-		return true, &Error{Message: ""}
-	} else {
-		return false, &Error{Message: "not a valid url"}
-	}
-}
-
-func (this *Zurl) save() {
-	this.generateId()
-	log.Printf("Saving zurl: %v", this.Id)
-	redisClient.Set("zurl:" + this.Id, []byte(this.json()))
-}
-
-// set the ID to the hex value of the counter
-func (this *Zurl) generateId() {
-	count, _ := redisClient.Incr("zurl:counter")
-	this.Id = fmt.Sprintf("%x", count)
-}
 
 type Error struct {
 	Message string
@@ -72,28 +41,45 @@ func main() {
 }
 
 func Root(res http.ResponseWriter, req *http.Request) {
-	if req.URL.Path != "/" {
-		http.NotFound(res, req)
-		return
-	}
 	switch req.Method {
 	case "GET":
-		Expand(res, req)
+		if req.URL.Path == "/" {
+			Welcome(res, req)
+		} else {
+			Expand(res, req)
+		}
 	case "POST":
+		if req.URL.Path != "/" {
+			http.NotFound(res, req)
+			return
+		}
 		Shorten(res, req)
 	default:
 		res.WriteHeader(405)
 	}
 }
 
-func Expand(res http.ResponseWriter, req *http.Request) {
+func Welcome(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintln(res, "Hello! Zurl is a URL shortener service.")
 }
 
+func Expand(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "text/html; charset=utf-8")
+	id := strings.Replace(req.URL.Path, "/", "", -1)
+	zurl, err := findZurl(id)
+	if err == nil {
+		res.WriteHeader(200)
+		res.Write([]byte(zurl.LongUrl))
+	} else {
+		res.WriteHeader(404)
+		res.Write([]byte(err.Message))
+	}
+}
+
 func Shorten(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	zurl := &Zurl{Id: "", LongUrl: req.FormValue("url")}
+	zurl := &Zurl{LongUrl: req.FormValue("url")}
 	valid, err := zurl.validate()
 	if valid {
 		zurl.save()
