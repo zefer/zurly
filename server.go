@@ -11,8 +11,8 @@ type Zurl struct {
 	Id string
 	LongUrl string
 }
-func (url Zurl) validate() (bool, string) {
-	return true, ""
+func (url Zurl) validate() (bool, *Error) {
+	return true, &Error{Message: ""}
 }
 
 type Error struct {
@@ -58,7 +58,7 @@ func Shorten(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(201)
 		res.Write(data)
 	} else {
-		data, _ := json.Marshal(&Error{Message: err})
+		data, _ := json.Marshal(err)
 		res.WriteHeader(422)
 		res.Write(data)
 	}
