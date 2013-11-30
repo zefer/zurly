@@ -20,3 +20,7 @@ Path /:ID will redirect to the corresponding long url for the given ID.
 
 I intend to implement both a JSON and a simple HTTP get/url based API using
 content negotiation.
+
+# Build & Run
+
+`go build` then `PORT=5000 zurly-server`
