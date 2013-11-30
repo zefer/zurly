@@ -9,6 +9,7 @@ import (
 
 type Zurl struct {
 	Id string
+	LongUrl string
 }
 
 func main() {
@@ -22,6 +23,10 @@ func main() {
 }
 
 func Root(res http.ResponseWriter, req *http.Request) {
+	if req.URL.Path != "/" {
+		http.NotFound(res, req)
+		return
+	}
 	switch req.Method {
 	case "GET":
 		Expand(res, req)
