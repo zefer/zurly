@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
 	"encoding/json"
 	"fmt"
+	"log"
 	"regexp"
 )
 
 type Zurl struct {
-	Id string
+	Id      string
 	LongUrl string
 }
 
@@ -25,7 +25,7 @@ func findZurl(id string) (*Zurl, *Error) {
 	}
 }
 
-func (this *Zurl) json() ([]byte) {
+func (this *Zurl) json() []byte {
 	data, _ := json.Marshal(this)
 	return data
 }
@@ -42,7 +42,7 @@ func (this *Zurl) validate() (bool, *Error) {
 func (this *Zurl) save() {
 	this.generateId()
 	log.Printf("Saving zurl: %v", this.Id)
-	redisClient.Set("zurl:" + this.Id, []byte(this.json()))
+	redisClient.Set("zurl:"+this.Id, []byte(this.json()))
 }
 
 // set the ID to the hex value of the counter

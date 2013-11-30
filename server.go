@@ -1,12 +1,12 @@
 package main
 
 import (
-	"os"
-	"log"
-	"net/http"
 	"encoding/json"
 	"fmt"
 	"github.com/hoisie/redis"
+	"log"
+	"net/http"
+	"os"
 	"strings"
 )
 
@@ -15,7 +15,8 @@ var redisClient redis.Client
 type Error struct {
 	Message string
 }
-func (this *Error) json() ([]byte) {
+
+func (this *Error) json() []byte {
 	data, _ := json.Marshal(this)
 	return data
 }
@@ -44,7 +45,7 @@ func main() {
 	http.HandleFunc("/", Root)
 	port := os.Getenv("PORT")
 	log.Print("Listening on port " + port)
-	err := http.ListenAndServe(":" + port, nil)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal("Error: %v", err)
 	}
