@@ -50,15 +50,15 @@ func Root(res http.ResponseWriter, req *http.Request) {
 
 func Welcome(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintln(res, "Hello! Zurl is a URL shortener service.")
+	fmt.Fprintln(res, "Hello! Zurly is a URL shortener service.")
 }
 
 func Expand(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "text/html; charset=utf-8")
 	id := strings.Replace(req.URL.Path, "/", "", -1)
-	zurl, err := findZurl(id)
+	url, err := findUrl(id)
 	if err == nil {
-		http.Redirect(res, req, zurl.LongUrl, 302)
+		http.Redirect(res, req, url.LongUrl, 302)
 	} else {
 		res.WriteHeader(404)
 		res.Write([]byte(err.Message))
@@ -67,12 +67,12 @@ func Expand(res http.ResponseWriter, req *http.Request) {
 
 func Shorten(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	zurl := &Zurl{LongUrl: req.FormValue("url")}
-	valid, err := zurl.validate()
+	url := &Url{LongUrl: req.FormValue("url")}
+	valid, err := url.validate()
 	if valid {
-		zurl.save()
+		url.save()
 		res.WriteHeader(201)
-		res.Write(zurl.json())
+		res.Write(url.json())
 	} else {
 		res.WriteHeader(422)
 		res.Write(err.json())
