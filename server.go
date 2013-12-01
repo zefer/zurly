@@ -3,14 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hoisie/redis"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 )
-
-var redisClient redis.Client
 
 type Error struct {
 	Message string
@@ -21,27 +18,8 @@ func (this *Error) json() []byte {
 	return data
 }
 
-func initCounter() {
-	counter, _ := redisClient.Get("zurl:counter")
-	if counter == nil {
-		log.Print("Initialising counter")
-		redisClient.Set("zurl:counter", []byte("0"))
-	} else {
-		log.Printf("Counter is " + string(counter))
-	}
-}
-
 func main() {
-	address := os.Getenv("REDIS_ADDRESS")
-	if address != "" {
-		log.Printf("Connecting to redis at %v", address)
-		redisClient = redis.Client{
-			Addr:     address,
-			Password: os.Getenv("REDIS_PASSWORD"),
-		}
-	}
-
-	initCounter()
+	connectToRedis()
 	http.HandleFunc("/", Root)
 	port := os.Getenv("PORT")
 	log.Print("Listening on port " + port)

@@ -14,7 +14,7 @@ type Zurl struct {
 
 func findZurl(id string) (*Zurl, *Error) {
 	log.Printf("Finding zurl: %v", id)
-	str, _ := redisClient.Get("zurl:" + id)
+	str, _ := redis.Get("zurl:" + id)
 	log.Printf("Found zurl: %v", str)
 	if str == nil {
 		return nil, &Error{Message: "Couldn't find this URL :("}
@@ -42,11 +42,11 @@ func (this *Zurl) validate() (bool, *Error) {
 func (this *Zurl) save() {
 	this.generateId()
 	log.Printf("Saving zurl: %v", this.Id)
-	redisClient.Set("zurl:"+this.Id, []byte(this.json()))
+	redis.Set("zurl:"+this.Id, []byte(this.json()))
 }
 
 // set the ID to the hex value of the counter
 func (this *Zurl) generateId() {
-	count, _ := redisClient.Incr("zurl:counter")
+	count, _ := redis.Incr("zurl:counter")
 	this.Id = fmt.Sprintf("%x", count)
 }
