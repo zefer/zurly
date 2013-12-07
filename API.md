@@ -1,7 +1,7 @@
 FORMAT: X-1A
 
 # Zurly URL shortener service
-Zurly is a simple URL shorter service, built to help me learn Go.
+Zurly is a simple URL shorter service.
 
 # Group URLs
 URL resources.
