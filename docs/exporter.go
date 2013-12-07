@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-var outFile = flag.String("out", "index.html", "Filename of the HTML output")
-var inFile = flag.String("in", "api.md", "Filename of the API blueprint input")
+var outFile = flag.String("out", "docs/index.html", "Filename of the HTML output")
+var inFile = flag.String("in", "docs/api.md", "Filename of the API blueprint input")
 
 func main() {
 	flag.Parse()
