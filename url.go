@@ -12,6 +12,10 @@ type Url struct {
 	LongUrl string
 }
 
+type UrlInput struct {
+	Url string
+}
+
 func findUrl(id string) (*Url, *Error) {
 	log.Printf("Finding url: %v", id)
 	str, _ := redis.Get("zurl:" + id)
@@ -30,8 +34,8 @@ func (this *Url) json() []byte {
 	return data
 }
 
-func (this *Url) validate() (bool, *Error) {
-	match, _ := regexp.MatchString(`^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$`, this.LongUrl)
+func (this *UrlInput) validate() (bool, *Error) {
+	match, _ := regexp.MatchString(`^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$`, this.Url)
 	if match {
 		return true, &Error{Message: ""}
 	} else {

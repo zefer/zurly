@@ -67,9 +67,20 @@ func Expand(res http.ResponseWriter, req *http.Request) {
 
 func Shorten(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json; charset=utf-8")
-	url := &Url{LongUrl: req.FormValue("url")}
-	valid, err := url.validate()
+
+	decoder := json.NewDecoder(req.Body)
+	var input UrlInput
+	jsonErr := decoder.Decode(&input)
+	if jsonErr != nil {
+		msg := &Error{Message: "Unable to parse JSON input"}
+		res.WriteHeader(400)
+		res.Write(msg.json())
+		return
+	}
+
+	valid, err := input.validate()
 	if valid {
+		url := &Url{LongUrl: input.Url}
 		url.save()
 		res.WriteHeader(201)
 		res.Write(url.json())
