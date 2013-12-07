@@ -1,0 +1,259 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Zurly URL shortener service</title>
+		<meta name="description" content="Zurly is a simple URL shorter service, built to help me learn Go.
+
+">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<style>
+			body {
+				font-family: 'Open Sans', sans-serif;
+			}
+
+			tt, pre, code {
+				font-family: Consolas, "Liberation Mono", Courier, monospace;
+				background-color: transparent !important;
+			}
+
+			pre.prettyprint {
+				border: 0px !important;
+				background-color: #fff;
+			}
+
+			.bg-default {
+				background-color: #F8F8F8;
+			}
+
+			.snippet {
+				list-style: none;
+				display: none;
+			}
+
+			.nav-rg {
+				width: 262.5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="page-header">
+						<h1>Zurly URL shortener service</h1>
+						<h2 class="lead"><small><p>Zurly is a simple URL shorter service, built to help me learn Go.</p>
+</small></h2>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					
+<ul class="nav nav-pills nav-stacked nav-rg affix" id="group-tab">
+	
+		<li><a href="#u-r-ls" data-toggle="tab"><strong>URLs</strong></a></li>
+	
+</ul>
+
+				</div>
+
+				<div class="col-md-9">
+					<div class="tab-content">
+						
+
+	<div class="tab-pane" id="u-r-ls">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2 id="u-r-ls">URLs</h2>
+			</div>
+			<div class="panel-body">
+				<p class="lead"><small>URL resources.
+
+</small></p>
+				
+
+	
+	
+
+	
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<span class="btn btn-primary">GET</span>
+			<code>/{id}</code>
+		</div>
+
+		<div class="panel-body">
+			<p>Redirect to the original (long) URL.</p>
+
+		</div>
+
+		<ul class="list-group">
+			
+				<li class="list-group-item bg-default"><strong>Parameters</strong></li>
+				<li class="list-group-item">
+<dl class="dl-horizontal">
+	
+		<dt>id</dt>
+		<dd>
+		
+		
+		<code>string</code> The id of the URL.
+		</dd>
+	
+</dl>
+</li>
+			
+			
+	
+		
+	
+		<li class="list-group-item bg-default response">
+			<strong>Requests</strong>
+			<a href="javascript:;" class="pull-right btn btn-link btn-sm snippet-toggle">SHOW</a>
+		</li>
+		<li class="list-group-item snippet">
+			
+				<code>&gt; Accept: text/html</code><br>
+			
+			
+		</li>
+	
+
+		
+	
+		<li class="list-group-item bg-default response">
+			<strong>Response <code>302</code></strong>
+			<a href="javascript:;" class="pull-right btn btn-link btn-sm snippet-toggle">SHOW</a>
+		</li>
+		<li class="list-group-item snippet">
+			
+				<code>&lt; Content-Type: text/html</code><br><code>&lt; Location: http://original.url</code><br>
+			
+			
+				<pre class="prettyprint">&lt;a href=&#34;http://original.url&#34;&gt;Found&lt;/a&gt;.
+</pre>
+			
+		</li>
+	
+
+	
+
+		</ul>
+	</div>
+	
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<span class="btn btn-primary">GET</span>
+			<code>/{id}</code>
+		</div>
+
+		<div class="panel-body">
+			<p>Return the URL resource as JSON</p>
+
+		</div>
+
+		<ul class="list-group">
+			
+				<li class="list-group-item bg-default"><strong>Parameters</strong></li>
+				<li class="list-group-item">
+<dl class="dl-horizontal">
+	
+		<dt>id</dt>
+		<dd>
+		
+		
+		<code>string</code> The id of the URL.
+		</dd>
+	
+</dl>
+</li>
+			
+			
+	
+		
+	
+		<li class="list-group-item bg-default response">
+			<strong>Requests</strong>
+			<a href="javascript:;" class="pull-right btn btn-link btn-sm snippet-toggle">SHOW</a>
+		</li>
+		<li class="list-group-item snippet">
+			
+				<code>&gt; Accept: application/json</code><br>
+			
+			
+		</li>
+	
+
+		
+	
+		<li class="list-group-item bg-default response">
+			<strong>Response <code>200</code></strong>
+			<a href="javascript:;" class="pull-right btn btn-link btn-sm snippet-toggle">SHOW</a>
+		</li>
+		<li class="list-group-item snippet">
+			
+				<code>&lt; Content-Type: application/json</code><br>
+			
+			
+				<pre class="prettyprint">{
+&#34;Id&#34;: &#34;1&#34;,
+&#34;LongUrl&#34;: &#34;http://original.url&#34;
+}
+</pre>
+			
+		</li>
+	
+
+	
+
+		</ul>
+	</div>
+	
+
+
+			</div>
+		</div>
+	</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+		<script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+		<script>
+			jQuery(function($) {
+				$('#group-tab a:first').tab('show');
+				$('.snippet-toggle').on("click", function(e) {
+					e.preventDefault();
+
+					var target = $(this).data('target');
+					$(this).parent().next().toggle();
+					if ($(this).text() == "SHOW") {
+						$(this).text("HIDE");
+					} else {
+						$(this).text("SHOW");
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
