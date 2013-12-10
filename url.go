@@ -35,7 +35,7 @@ func (this *Url) json() []byte {
 }
 
 func (this *UrlInput) validate() (bool, *Error) {
-	match, _ := regexp.MatchString(`^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$`, this.Url)
+	match, _ := regexp.MatchString(`^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\?#=&\/\w \.\-]*)*\/?$`, this.Url)
 	if match {
 		return true, &Error{Message: ""}
 	} else {
